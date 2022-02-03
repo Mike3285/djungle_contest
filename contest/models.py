@@ -107,7 +107,7 @@ class Prize(MyModel):
                                                                                    microsecond=999999)): False
             for i in range(len(winning_intervals))
         }
-        self.winning_timestamps = json.dumps(winning_moments,)
+        self.winning_timestamps = json.dumps(winning_moments, )
         if not self._state.adding is True:
             self.save()
 
