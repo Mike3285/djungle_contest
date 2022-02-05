@@ -124,3 +124,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRON_USER = "root"
+AUTH_USER_MODEL = 'contest.Utente'
+

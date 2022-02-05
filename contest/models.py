@@ -4,6 +4,7 @@ import random
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 from .utils import random_date
@@ -27,10 +28,21 @@ class MyModel(models.Model):
         abstract = True
 
 
+class Utente(AbstractUser):
+    WMAX = models.IntegerField(verbose_name=_("Max wins perday"),
+                               help_text=_("Number of times the prize can be won by this user today"),
+                               default=1,
+                               blank=True,
+                               null=False)
+    won_contests = models.JSONField(verbose_name=_(""),
+                                          help_text=_("Today's winning timestamps"),
+                                          blank=True,
+                                          null=True)
+
 class Contest(MyModel):
     name = models.CharField(verbose_name=_("Name"),
                             max_length=255,
-                            help_text=("Contest's name or details"),
+                            help_text=_("Contest's name or details"),
                             blank=False,
                             null=False, )
 
@@ -45,10 +57,15 @@ class Contest(MyModel):
     code = models.CharField(verbose_name=_("Code"),
                             unique=True,
                             max_length=5,
-                            help_text=("Contest's unique code"),
+                            help_text=_("Contest's unique code"),
                             blank=False,
                             null=False,
                             db_index=True)
+
+    allowed_users = models.ManyToManyField("contest.Utente",
+                                           related_name="allowed_contests",
+                                           verbose_name=_("Allowed users"),
+                                           help_text=_("Users allowed to participate to this contest"))
 
     def __str__(self):
         return "Contest " + self.code

@@ -14,3 +14,10 @@ class PrizeAdmin(admin.ModelAdmin):
     list_display = ['pk', 'code', 'name', 'perday','won_today', 'contest_field']
     list_filter = ['code', 'name', 'perday', 'contest_field']
 
+
+
+@admin.register(models.Utente)
+class UtenteAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'username', 'WMAX']
+    list_filter = ['username', 'WMAX']
+
