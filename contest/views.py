@@ -15,11 +15,14 @@ from django.contrib.auth import authenticate, login
 def check_contest(request):
     if not request.user.is_authenticated:
         return JsonResponse(
-            {"error": {
-                "status": "401",
-                "title": "Unauthorized",
-                "detail": "You must be logged in to access this resource"
-            }}, status=404
+            {"error":
+                {
+                    "status": "403",
+                    "title": "Unauthorized",
+                    "detail": "You must be logged in to access this resource"
+                }
+            },
+            status=403
         )
     else:
         code = request.GET.get('contest')
@@ -49,15 +52,17 @@ def check_contest(request):
                 )
             else:
                 user = models.Utente.objects.get(pk=user_id)
-                if user in contest.allowed_users:
+                if user in contest.allowed_users.all():
                     winner = check_winner(contest.prize_field, request_time)
                     if winner:
-                        data = json.loads(serializers.serialize('json', [contest.prize_field], fields=('name', 'code')))
                         return JsonResponse(
                             {
                                 "data": {
                                     "winner": winner,
-                                    "prize": data[0],
+                                    "prize": {
+                                        "code": contest.prize_field.code,
+                                        "name": contest.prize_field.name
+                                    },
                                 }
                             }
                         )
@@ -148,7 +153,6 @@ def login_user(request):
     password = request.GET.get('password')
     if token and password:
         # test token:        token=JyfyLyML1WAmxDtK6uIWYW7srhxkm8BH pass=ciao1
-        print(f"{token} is trying to login with pass {password}")
         user = authenticate(request, username=token, password=password)
         if user is not None:
             login(request, user)

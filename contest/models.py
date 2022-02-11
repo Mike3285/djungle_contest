@@ -30,14 +30,15 @@ class MyModel(models.Model):
 
 class Utente(AbstractUser):
     WMAX = models.IntegerField(verbose_name=_("Max wins perday"),
-                               help_text=_("Number of times the prize can be won by this user today"),
+                               help_text=_("Number of times this user can win a single contest"),
                                default=1,
                                blank=True,
                                null=False)
-    won_contests = models.JSONField(verbose_name=_(""),
-                                          help_text=_("Today's winning timestamps"),
-                                          blank=True,
-                                          null=True)
+    won_contests = models.JSONField(verbose_name=_("Won contests today"),
+                                    help_text=_("Contests this user won today"),
+                                    blank=True,
+                                    null=True)
+
 
 class Contest(MyModel):
     name = models.CharField(verbose_name=_("Name"),

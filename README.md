@@ -1,7 +1,7 @@
 # Djungle Contest API V 2.0
 
 ## Prerequisites:
-Project was made and tested in the following environment:
+Project has been made and was tested with the following environment:
 - Python 3.9+
 - Linux 5.15+
 
